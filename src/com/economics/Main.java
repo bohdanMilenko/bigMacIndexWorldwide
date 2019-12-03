@@ -11,30 +11,27 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Map<String, CountryStatistics> countryToFinancialResults = new HashMap<>();
+        Map<String, CountryStatistics> countryToStatistics = new HashMap<>();
 
         try {
             Scanner scanner = new Scanner(new BufferedReader(new FileReader("bigMacData.csv")));
-            scanner.useDelimiter(",");
             scanner.nextLine();
             while (scanner.hasNextLine()) {
-                String countryName = scanner.next();
-                scanner.skip(scanner.delimiter());
-                String currencyAbbreviation = scanner.next();
-                scanner.skip(scanner.delimiter());
-                String bigMacPrice = scanner.next();
-                scanner.skip(scanner.delimiter());
-                String averageSalary = scanner.next();
+                String line = scanner.nextLine();
+                String[] countryInfo = line.split(",");
+                CountryStatistics countryStatistics =  CountryStatistics.createCountryRecord(countryInfo);
 
+                countryToStatistics.put(countryStatistics.getCountryName(), countryStatistics);
 
-                System.out.println(averageSalary);
-               // CountryStatistics statistics = new CountryStatistics(currencyAbbreviation, bigMacPrice, averageSalary);
-               // countryToFinancialResults.put(countryName , statistics);
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
-        countryToFinancialResults.forEach((k,v)-> System.out.println(k));
+        countryToStatistics.forEach((k,v)-> System.out.println(k));
     }
+
+
+
 }
