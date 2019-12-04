@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="165e2e20-84dc-427b-9423-c60406d9d1a8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commons-csv-1.7-src.tar.gz" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/bigMacIndex/com/economics/CountryStatistics.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/bigMacIndex/com/economics/CountryStatistics.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/bigMacIndex/com/economics/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/bigMacIndex/com/economics/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/economics/CountryStatistics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/economics/CountryStatistics.java" afterDir="false" />
@@ -87,7 +85,7 @@
       <updated>1575251795936</updated>
       <workItem from="1575251797569" duration="1704000" />
       <workItem from="1575335922512" duration="2797000" />
-      <workItem from="1575408891344" duration="2065000" />
+      <workItem from="1575408891344" duration="9540000" />
     </task>
     <servers />
   </component>
