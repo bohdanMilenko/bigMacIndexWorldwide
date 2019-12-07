@@ -16,4 +16,4 @@ Apllication loads the .csv file with the data about countries, their economics a
 Here is an example how does it look like:
 
 
-![Data Scheme](pictures\dataExample.png)
+![Data Scheme](pictures/dataExample.png)
