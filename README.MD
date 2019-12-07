@@ -15,4 +15,4 @@ Apllication loads the .csv file with the data about countries, their economics a
 
 Here is an example how does it look like:
 
-<img src ="pictures/dataExample.png" width="900">
+<img src ="pictures/dataExample.png" width="700">
