@@ -15,4 +15,9 @@ Apllication loads the .csv file with the data about countries, their economics a
 
 Here is an example how does it look like:
 
-<img src ="pictures/dataExample.png" width="700">
+<p align="center">
+   <img src ="pictures/dataExample.png" width="700">
+</p>
+
+Afterwards, there is a static function that is called to calculate BigMac Indexes for each country, rank them and put in the LinkedHashMap.
+
