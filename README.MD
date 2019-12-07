@@ -7,7 +7,7 @@ The Big Mac Index is an index created by The Economist
 
 The price of a Big Mac reflects a number of local economic factors, 
 ranging from the cost of the ingredients to the cost of local production and advertising. 
-For more details please [reference here](https://www.investopedia.com/ask/answers/09/big-mac-index.asp)
+For more details please reference [here.](https://www.investopedia.com/ask/answers/09/big-mac-index.asp)
 
 ## Program Flow
 
@@ -16,4 +16,4 @@ Apllication loads the .csv file with the data about countries, their economics a
 Here is an example how does it look like:
 
 
-![Scheme of data](\pictures\dataExample.png)
+![Data Scheme](pictures\dataExample.png)
