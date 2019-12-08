@@ -1,6 +1,8 @@
 package com.economics;
 
-import java.util.*;
+import java.text.DecimalFormat;
+import java.util.Formatter;
+import java.util.Map;
 
 public class Main {
 
@@ -11,8 +13,11 @@ public class Main {
 
         Map<String, CountryFinancialResults> rankedCountries = Util.calculateBigMacIndex(countryToStatistics);
 
-        rankedCountries.forEach((k, v) -> System.out.println(k + ". People in " + v.getCountryName() + " can purchase "
-                + v.getAverageSalary() / v.getPricePerBigMac() + " burgers."));
+        CountryFinancialResults.printOverallResults(rankedCountries);
+
+        Util.queryCountryIndex();
+
+
 
 //        Map<String, CountryStatistics> sortedMap = countryToStatistics
 //                .entrySet()

@@ -1,5 +1,8 @@
 package com.economics;
 
+import java.text.DecimalFormat;
+import java.util.Map;
+
 public class CountryFinancialResults implements  Comparable<CountryFinancialResults>{
 
     private String countryName;
@@ -23,6 +26,10 @@ public class CountryFinancialResults implements  Comparable<CountryFinancialResu
 
     public void setRank(int rank) {
         this.rank = rank;
+    }
+
+    public double getBigMacIndex() {
+        return bigMacIndex;
     }
 
     public String getCountryName() {
@@ -53,8 +60,22 @@ public class CountryFinancialResults implements  Comparable<CountryFinancialResu
         this.averageSalary = averageSalary;
     }
 
+    public  static void printOverallResults(Map<String, CountryFinancialResults> rankedCountries){
+        DecimalFormat df = new DecimalFormat("#");
+        rankedCountries.forEach((k, v) -> System.out.println(v.getRank() + ". " + k + ". People in " + v.getCountryName() + " can purchase "
+                + df.format(v.getAverageSalary() / v.getPricePerBigMac()) + " burgers."));
+    }
+
     @Override
     public int compareTo(CountryFinancialResults o) {
-        return Double.compare(this.bigMacIndex, o.bigMacIndex);
+        if (this.bigMacIndex < o.bigMacIndex) {
+            return 1;
+        } else if (this.bigMacIndex > o.bigMacIndex) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
+
+
 }
