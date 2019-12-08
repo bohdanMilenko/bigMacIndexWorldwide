@@ -1,20 +1,29 @@
 package com.economics;
 
-public class CountryStatistics {
+public class CountryFinancialResults {
 
     private String countryName;
     private String currencyAbbreviation;
     private double pricePerBigMac;
     private double averageSalary;
+    private double bigMacIndex;
+    private int rank = 0;
 
-    public CountryStatistics(String countryName, String currencyAbbreviation, double pricePerBigMac, double averageSalary) {
+    public CountryFinancialResults(String countryName, String currencyAbbreviation, double pricePerBigMac, double averageSalary) {
         this.countryName = countryName;
         this.currencyAbbreviation = currencyAbbreviation;
         this.pricePerBigMac = pricePerBigMac;
         this.averageSalary = averageSalary;
+        this.bigMacIndex = (averageSalary / pricePerBigMac);
     }
 
+    public int getRank() {
+        return rank;
+    }
 
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
 
     public String getCountryName() {
         return countryName;
