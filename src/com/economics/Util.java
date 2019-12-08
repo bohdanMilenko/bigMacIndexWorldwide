@@ -3,10 +3,7 @@ package com.economics;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 class Util {
 
@@ -38,32 +35,15 @@ class Util {
     }
 
 
-    public static Map<Integer, CountryFinancialResults> calculateBigMacIndex(Map<String, CountryFinancialResults> inputMap) {
+    public static Map<String, CountryFinancialResults> calculateBigMacIndex(Map<String, CountryFinancialResults> inputMap) {
 
-        Map<String, CountryFinancialResults> loopingMap = new HashMap<>(inputMap);
-        Map<Integer, CountryFinancialResults> countryToBigMacIndex = new LinkedHashMap<>();
-        CountryFinancialResults highestIndexRecord = loopingMap.get("Canada");
-        while (!loopingMap.isEmpty()) {
-            int i = 1;
-            for (Map.Entry<String, CountryFinancialResults> record : loopingMap.entrySet()) {
+        List<Map.Entry<String,CountryFinancialResults>> list = new ArrayList<>(inputMap.entrySet());
+        list.sort(Map.Entry.comparingByValue());
 
-                double currentSalary = record.getValue().getAverageSalary();
-                double currentPrice = record.getValue().getPricePerBigMac();
-                double highestRecordsSalary = highestIndexRecord.getAverageSalary();
-                double highestRecordsPrice = highestIndexRecord.getPricePerBigMac();
-                double currentBigMacIndex = (currentSalary / currentPrice);
-                double highestBigMacIndex = (highestRecordsSalary / highestRecordsPrice);
-
-                System.out.println("Inside loop " + i);
-                if (currentBigMacIndex > highestBigMacIndex) {
-                    highestIndexRecord = record.getValue();
-                    countryToBigMacIndex.put(i, highestIndexRecord);
-                    loopingMap.remove(highestIndexRecord.getCountryName());
-                    i++;
-                    System.out.println("Inside condition " + i);
-                }
-            }
+        Map<String, CountryFinancialResults> result = new LinkedHashMap<>();
+        for (Map.Entry<String,CountryFinancialResults> record : list){
+            result.put(record.getKey(),record.getValue());
         }
-        return countryToBigMacIndex;
+        return result;
     }
 }

@@ -1,6 +1,6 @@
 package com.economics;
 
-public class CountryFinancialResults {
+public class CountryFinancialResults implements  Comparable<CountryFinancialResults>{
 
     private String countryName;
     private String currencyAbbreviation;
@@ -9,7 +9,7 @@ public class CountryFinancialResults {
     private double bigMacIndex;
     private int rank = 0;
 
-    public CountryFinancialResults(String countryName, String currencyAbbreviation, double pricePerBigMac, double averageSalary) {
+    public CountryFinancialResults(String countryName, String currencyAbbreviation, double pricePerBigMac, double averageSalary)  {
         this.countryName = countryName;
         this.currencyAbbreviation = currencyAbbreviation;
         this.pricePerBigMac = pricePerBigMac;
@@ -51,5 +51,10 @@ public class CountryFinancialResults {
 
     public void setAverageSalary(double averageSalary) {
         this.averageSalary = averageSalary;
+    }
+
+    @Override
+    public int compareTo(CountryFinancialResults o) {
+        return Double.compare(this.bigMacIndex, o.bigMacIndex);
     }
 }

@@ -9,7 +9,7 @@ public class Main {
 
         Map<String, CountryFinancialResults> countryToStatistics = Util.loadData();
 
-        Map<Integer, CountryFinancialResults> rankedCountries = Util.calculateBigMacIndex(countryToStatistics);
+        Map<String, CountryFinancialResults> rankedCountries = Util.calculateBigMacIndex(countryToStatistics);
 
         rankedCountries.forEach((k, v) -> System.out.println(k + ". People in " + v.getCountryName() + " can purchase "
                 + v.getAverageSalary() / v.getPricePerBigMac() + " burgers."));
