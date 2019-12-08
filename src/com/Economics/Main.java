@@ -1,7 +1,5 @@
-package com.economics;
+package com.Economics;
 
-import java.text.DecimalFormat;
-import java.util.Formatter;
 import java.util.Map;
 
 public class Main {
@@ -16,7 +14,6 @@ public class Main {
         CountryFinancialResults.printOverallResults(rankedCountries);
 
         Util.queryCountryIndex();
-
 
 
 //        Map<String, CountryStatistics> sortedMap = countryToStatistics

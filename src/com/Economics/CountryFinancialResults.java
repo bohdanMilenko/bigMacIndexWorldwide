@@ -1,9 +1,9 @@
-package com.economics;
+package com.Economics;
 
 import java.text.DecimalFormat;
 import java.util.Map;
 
-public class CountryFinancialResults implements  Comparable<CountryFinancialResults>{
+public class CountryFinancialResults implements Comparable<CountryFinancialResults> {
 
     private String countryName;
     private String currencyAbbreviation;
@@ -12,7 +12,7 @@ public class CountryFinancialResults implements  Comparable<CountryFinancialResu
     private double bigMacIndex;
     private int rank = 0;
 
-    public CountryFinancialResults(String countryName, String currencyAbbreviation, double pricePerBigMac, double averageSalary)  {
+    public CountryFinancialResults(String countryName, String currencyAbbreviation, double pricePerBigMac, double averageSalary) {
         this.countryName = countryName;
         this.currencyAbbreviation = currencyAbbreviation;
         this.pricePerBigMac = pricePerBigMac;
@@ -60,7 +60,7 @@ public class CountryFinancialResults implements  Comparable<CountryFinancialResu
         this.averageSalary = averageSalary;
     }
 
-    public  static void printOverallResults(Map<String, CountryFinancialResults> rankedCountries){
+    public static void printOverallResults(Map<String, CountryFinancialResults> rankedCountries) {
         DecimalFormat df = new DecimalFormat("#");
         rankedCountries.forEach((k, v) -> System.out.println(v.getRank() + ". " + k + ". People in " + v.getCountryName() + " can purchase "
                 + df.format(v.getAverageSalary() / v.getPricePerBigMac()) + " burgers."));

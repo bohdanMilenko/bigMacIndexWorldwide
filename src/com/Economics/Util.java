@@ -1,6 +1,5 @@
-package com.economics;
+package com.Economics;
 
-import javax.sound.midi.Soundbank;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -41,35 +40,36 @@ class Util {
 
     public static Map<String, CountryFinancialResults> calculateBigMacIndex(Map<String, CountryFinancialResults> inputMap) {
 
-        List<Map.Entry<String,CountryFinancialResults>> list = new ArrayList<>(inputMap.entrySet());
+        List<Map.Entry<String, CountryFinancialResults>> list = new ArrayList<>(inputMap.entrySet());
         list.sort(Map.Entry.comparingByValue());
 
         Map<String, CountryFinancialResults> result = new LinkedHashMap<>();
-        int i=1;
-        for (Map.Entry<String,CountryFinancialResults> record : list){
+        int i = 1;
+        for (Map.Entry<String, CountryFinancialResults> record : list) {
             record.getValue().setRank(i);
             i++;
-            result.put(record.getKey(),record.getValue());
+            result.put(record.getKey(), record.getValue());
         }
         countyToIndexMap = new LinkedHashMap<>(result);
         return result;
     }
 
-    static void queryCountryIndex(){
+    static void queryCountryIndex() {
         System.out.println("Please enter a country: ");
         String requestedCountry = UserInputService.getStringFromCustomer();
-        int i=0;
-        if(countyToIndexMap.containsKey(requestedCountry)){
+        int i = 0;
+        if (countyToIndexMap.containsKey(requestedCountry)) {
             CountryFinancialResults foundRecord = countyToIndexMap.get(requestedCountry);
-            DecimalFormat df = new DecimalFormat("###,###.##");
+            DecimalFormat df = new DecimalFormat("###,###");
             System.out.println(foundRecord.getCountryName() + " is " + foundRecord.getRank() + " country in the world to get the cheapest Big Mac. " +
                     "Average citizen of " + foundRecord.getCountryName() + " can buy " + df.format(foundRecord.getBigMacIndex()) + " burgers!");
-        }else {
-                queryCountryIndex();
-                i++;
-           if(i==3) {
-               throw new NoSuchElementException("Failed to find info about this country");
-           }
+        } else {
+            System.out.println("No info, try another one");
+            queryCountryIndex();
+            i++;
+            if (i == 3) {
+                throw new NoSuchElementException("Failed to find info about this country");
+            }
 
         }
     }
