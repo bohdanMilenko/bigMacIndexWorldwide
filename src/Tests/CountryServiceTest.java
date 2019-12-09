@@ -2,37 +2,34 @@ package Tests;
 
 import com.Economics.CountryFinancialResults;
 import com.Economics.CountryService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.junit.Assert.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CountryServiceTest {
-
     Map<String, CountryFinancialResults> countryToStatistics;
 
-    @Before
+    private final String countryName = "Australia";
+    private final String countryCurrency = "AUD";
+    private final double countryPricePerBurger = 4.26;
+    private final double countryAverageSalary = 53349.41;
+
+    @BeforeEach
     void setUp() {
         countryToStatistics = CountryService.loadData();
-
     }
 
     @Test
     void loadData() {
         assertTrue(countryToStatistics.size() > 0);
         CountryFinancialResults australia = countryToStatistics.get("Australia");
-        assertEquals("Australia", australia.getCountryName());
-        assertEquals();
-    }
-
-    @Test
-    void calculateBigMacIndex() {
-    }
-
-    @Test
-    void queryCountryIndex() {
+        assertEquals(countryName, australia.getCountryName());
+        assertEquals(countryCurrency, australia.getCurrencyAbbreviation());
+        assertEquals(countryPricePerBurger, australia.getPricePerBigMac());
+        assertEquals(countryAverageSalary, australia.getAverageSalary());
     }
 }

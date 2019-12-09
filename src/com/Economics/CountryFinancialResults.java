@@ -32,6 +32,10 @@ public class CountryFinancialResults implements Comparable<CountryFinancialResul
         return bigMacIndex;
     }
 
+    public String getCurrencyAbbreviation() {
+        return currencyAbbreviation;
+    }
+
     public String getCountryName() {
         return countryName;
     }
