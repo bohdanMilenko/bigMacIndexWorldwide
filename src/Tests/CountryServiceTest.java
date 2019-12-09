@@ -5,6 +5,7 @@ import com.Economics.CountryService;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.swing.*;
 import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
@@ -23,7 +24,7 @@ class CountryServiceTest {
     @Test
     void loadData() {
         assertTrue(countryToStatistics.size()>0);
-
+        CountryFinancialResults australia =  countryToStatistics.get("Australia");
 
     }
 

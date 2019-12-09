@@ -1,18 +1,18 @@
-﻿country,currencyCode,  dollarPrice  ,  averageIncome  
-Australia,AUD,4.26011,53349.41
-Canada,CAD,5.15594,48848.52
-Switzerland,CHF,6.5422,64108.55
-Chile,CLP,3.82747,27124.71
-Czech Republic,CZK,3.72819,26961.58
-Denmark,DKK,4.50498,55253.34
-Britain,GBP,4.10131,44770.05
-Hungary,HUF,3.09767,24454.71
-Israel,ILS,4.76631,37655.30
-Japan,JPY,3.58571,40573.38
-South Korea,KRW,3.81178,39471.71
-Mexico,MXN,2.64617,16297.71
-Norway,NOK,4.85395,50955.83
-New Zealand,NZD,4.2288,42324.87
-Poland,PLN,2.83632,29109.04
-Sweden,SEK,5.38256,44196.24
+﻿country,currencyCode,   dollarPrice   ,   averageIncome   
+Australia,AUD,4.26,53349.41
+Canada,CAD,5.16,48848.52
+Switzerland,CHF,6.54,64108.55
+Chile,CLP,3.83,27124.71
+Czech Republic,CZK,3.73,26961.58
+Denmark,DKK,4.50,55253.34
+Britain,GBP,4.10,44770.05
+Hungary,HUF,3.10,24454.71
+Israel,ILS,4.77,37655.30
+Japan,JPY,3.59,40573.38
+South Korea,KRW,3.81,39471.71
+Mexico,MXN,2.65,16297.71
+Norway,NOK,4.85,50955.83
+New Zealand,NZD,4.23,42324.87
+Poland,PLN,2.84,29109.04
+Sweden,SEK,5.38,44196.24
 United States,USD,5.74,63093.01
