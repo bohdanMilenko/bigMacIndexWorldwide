@@ -1,7 +1,5 @@
 package com.Economics;
 
-import javafx.css.Match;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -47,7 +45,7 @@ public class CountryService {
                 double bigMacPrice = Double.parseDouble(info[2]);
                 double averageSalary = Double.parseDouble(info[3]);
                 return new CountryFinancialResults(countryName, currencyAbbreviation, bigMacPrice, averageSalary);
-            }else {
+            } else {
                 throw new IllegalArgumentException("Wrong type of data inside of file! Check if numbers are formatted as numbers");
             }
 
