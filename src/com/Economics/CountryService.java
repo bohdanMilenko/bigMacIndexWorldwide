@@ -6,22 +6,23 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.*;
 
-class Util {
+public class CountryService {
 
     private static Map<String, CountryFinancialResults> countyToIndexMap;
+    private  static String fileName = "bigMacData.csv";
 
-    static Map<String, CountryFinancialResults> loadData() {
-        Map<String, CountryFinancialResults> countryToStatistics = new HashMap<>();
-        try (Scanner scanner = new Scanner(new BufferedReader(new FileReader("bigMacData.csv")));) {
+    public static Map<String, CountryFinancialResults> loadData() {
+        Map<String, CountryFinancialResults> stringCountryFinancialResultsHashMap = new HashMap<>();
+        try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(fileName)))) {
             scanner.nextLine();
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] countryInfo = line.split(",");
                 CountryFinancialResults countryFinancialResults = createCountryRecord(countryInfo);
-                countryToStatistics.put(countryFinancialResults.getCountryName(), countryFinancialResults);
+                stringCountryFinancialResultsHashMap.put(countryFinancialResults.getCountryName(), countryFinancialResults);
 
             }
-            return countryToStatistics;
+            return stringCountryFinancialResultsHashMap;
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -30,11 +31,15 @@ class Util {
     }
 
     private static CountryFinancialResults createCountryRecord(String[] info) {
-        String countryName = info[0];
-        String currencyAbbreviation = info[1];
-        double bigMacPrice = Double.parseDouble(info[2]);
-        double averageSalary = Double.parseDouble(info[3]);
-        return new CountryFinancialResults(countryName, currencyAbbreviation, bigMacPrice, averageSalary);
+        if (info.length >= 1) {
+            String countryName = info[0];
+            String currencyAbbreviation = info[1];
+            double bigMacPrice = Double.parseDouble(info[2]);
+            double averageSalary = Double.parseDouble(info[3]);
+            return new CountryFinancialResults(countryName, currencyAbbreviation, bigMacPrice, averageSalary);
+        } else {
+            throw new IllegalArgumentException("File is not read correctly, as the string is empty!");
+        }
     }
 
 

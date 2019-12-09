@@ -36,28 +36,12 @@ public class CountryFinancialResults implements Comparable<CountryFinancialResul
         return countryName;
     }
 
-    public String getCurrencyAbbreviation() {
-        return currencyAbbreviation;
-    }
-
-    public void setCurrencyAbbreviation(String currencyAbbreviation) {
-        this.currencyAbbreviation = currencyAbbreviation;
-    }
-
     public double getPricePerBigMac() {
         return pricePerBigMac;
     }
 
-    public void setPricePerBigMac(double pricePerBigMac) {
-        this.pricePerBigMac = pricePerBigMac;
-    }
-
     public double getAverageSalary() {
         return averageSalary;
-    }
-
-    public void setAverageSalary(double averageSalary) {
-        this.averageSalary = averageSalary;
     }
 
     public static void printOverallResults(Map<String, CountryFinancialResults> rankedCountries) {
