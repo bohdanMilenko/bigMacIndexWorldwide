@@ -20,7 +20,7 @@ class CountryServiceTest {
 
     @BeforeEach
     void setUp() {
-        countryToStatistics = CountryService.loadData();
+        countryToStatistics = CountryService.loadData("bigMacData.csv");
     }
 
     @Test

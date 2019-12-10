@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
 
 
-        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData();
+        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData("bigMacData.csv");
 
         Map<String, CountryFinancialResults> rankedCountries = CountryService.calculateBigMacIndex(countryToStatistics);
 
@@ -15,10 +15,14 @@ public class Main {
 
         CountryService.queryCountryIndex();
 
+        //String boo = UserInputService.getStringFromCustomer();
+        //System.out.println(boo);
 
+        double bod = UserInputService.getNumberFromCustomer();
+        System.out.println(bod);
 
     }
 
-
 }
+
 

@@ -11,32 +11,57 @@ import java.util.regex.Pattern;
 public class CountryService {
 
     private static Map<String, CountryFinancialResults> countyToIndexMap;
-    private static String fileName = "bigMacData.csv";
 
-    public static Map<String, CountryFinancialResults> loadData() {
+
+    /**
+     * @return
+     */
+
+    //One functional - change to increase abstraction - check for headers
+    //Optional interface - wrapper
+    public static Map<String, CountryFinancialResults> loadData(String filePath) {
         Map<String, CountryFinancialResults> stringCountryFinancialResultsHashMap = new HashMap<>();
-        try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(fileName)))) {
-            scanner.nextLine();
+        try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(filePath)))) {
+            //Skip headers
+            String possibleHeaders = scanner.nextLine();
+            if(!checkIfHasHeaders(possibleHeaders)){
+                String[] countryInfo = possibleHeaders.split(",");
+                CountryFinancialResults countryFinancialResults = createCountryRecord(countryInfo);
+                stringCountryFinancialResultsHashMap.put(countryFinancialResults.getCountryName(),countryFinancialResults);
+            }
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] countryInfo = line.split(",");
                 CountryFinancialResults countryFinancialResults = createCountryRecord(countryInfo);
                 stringCountryFinancialResultsHashMap.put(countryFinancialResults.getCountryName(), countryFinancialResults);
-
             }
-            return stringCountryFinancialResultsHashMap;
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-        throw new IllegalArgumentException();
+        return stringCountryFinancialResultsHashMap;
     }
 
+    private static boolean checkIfHasHeaders(String possibleHeaders){
+        String[] line = possibleHeaders.split(",");
+        try {
+            Double.parseDouble(line[2]);
+            Double.parseDouble(line[3]);
+        }catch (InputMismatchException e){
+            System.out.println("Headers are present");
+            return true;
+        }
+        return false;
+    }
+
+
+    //todo method that checks the accuracy of Line - isValidLine
     private static CountryFinancialResults createCountryRecord(String[] info) {
         //Regex format is: "Any number of digits . Any number of digits"
-        Pattern pattern = Pattern.compile("\\d+.\\d+");
-        Matcher matcherIndex2 = pattern.matcher(info[2]);
-        Matcher matcherIndex3 = pattern.matcher(info[3]);
+        //TODO - RENAME
+        Pattern digitDotDigit = Pattern.compile("\\d+.\\d+");
+        Matcher matcherIndex2 = digitDotDigit.matcher(info[2]);
+        Matcher matcherIndex3 = digitDotDigit.matcher(info[3]);
 
         if (info.length == 4) {
             if (matcherIndex2.matches() && matcherIndex3.matches()) {
@@ -48,18 +73,20 @@ public class CountryService {
             } else {
                 throw new IllegalArgumentException("Wrong type of data inside of file! Check if numbers are formatted as numbers");
             }
-
         } else {
+            //correct msg + print line which causes problem
             throw new IllegalArgumentException("File is not read correctly, as the string is empty!");
         }
     }
+
+    //TODO separate exception class to make it custom
 
 
     public static Map<String, CountryFinancialResults> calculateBigMacIndex(Map<String, CountryFinancialResults> inputMap) {
 
         List<Map.Entry<String, CountryFinancialResults>> list = new ArrayList<>(inputMap.entrySet());
         list.sort(Map.Entry.comparingByValue());
-
+//TODO GET RID OF LinkedHashMap
         Map<String, CountryFinancialResults> result = new LinkedHashMap<>();
         int i = 1;
         for (Map.Entry<String, CountryFinancialResults> record : list) {

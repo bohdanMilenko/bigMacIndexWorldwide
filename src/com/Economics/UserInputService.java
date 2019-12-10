@@ -9,7 +9,7 @@ public class UserInputService {
     public static Scanner scanner = new Scanner(System.in);
 
 
-    public static double getNumberFromCustomer() {
+    public static double getNumberFromCustomer2() {
         double numberToReturn = -1;
         try {
             do {
@@ -24,6 +24,27 @@ public class UserInputService {
             System.out.println("Please enter a valid number >= 0!");
             scanner.nextLine();
             getNumberFromCustomer();
+        }
+        return numberToReturn;
+    }
+
+    public static double getNumberFromCustomer() {
+        double numberToReturn = -1;
+        try {
+            numberToReturn = scanner.nextDouble();
+            //scanner.nextLine();
+            if (numberToReturn < 0) {
+                System.out.println("Please enter a valid number >= 0!");
+                System.out.println("Current value: " + numberToReturn);
+                numberToReturn = getNumberFromCustomer();
+            }
+            return numberToReturn;
+        } catch (InputMismatchException e) {
+            System.out.println("Please enter a valid number >= 0!");
+            scanner.nextInt();
+            //scanner.nextLine();
+            String abc =  scanner.nextLine();
+            getNumberFromCustomer();
 
         }
         return numberToReturn;
@@ -34,17 +55,25 @@ public class UserInputService {
         int i = 0;
         try {
             returnString = scanner.nextLine();
-            while (!Pattern.matches("[a-zA-z]+", returnString)) {
-                System.out.println("Please enter a string!");
-                returnString = scanner.nextLine();
-                i++;
-                if (i == 3) throw new RuntimeException("Invalid input 3 times in a row!");
+            while (true) {
+                if (Pattern.matches("[a-zA-z]+", returnString)) {
+                    return returnString;
+                } else {
+                    System.out.println("Please enter a string!");
+                    returnString = scanner.nextLine();
+                    i++;
+                    if (i == 3) throw new RuntimeException("Invalid input 3 times in a row!");
+                }
             }
-        } catch (InputMismatchException e) {
-            System.out.println("Wrong input from customer");
+        } catch (InputMismatchException  e) {
+            System.out.println("Wrong input from customer " + e.getMessage());
+            e.printStackTrace();
         } catch (RuntimeException e) {
-            System.out.println("Unable to get user input");
+            System.out.println("Unable to get user input: " + e.getMessage());
+            e.printStackTrace();
         }
         return returnString.substring(0, 1).toUpperCase() + returnString.substring(1).toLowerCase();
     }
+
+
 }
