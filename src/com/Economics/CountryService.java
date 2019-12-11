@@ -22,15 +22,15 @@ public class CountryService {
     public static Map<String, CountryFinancialResults> loadData(String filePath) {
         Map<String, CountryFinancialResults> stringCountryFinancialResultsHashMap = new HashMap<>();
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(filePath)))) {
-            //Skip headers
             String possibleHeaders = scanner.nextLine();
-            if(!checkIfHasHeaders(possibleHeaders)){
+            if (!checkIfHasHeaders(possibleHeaders)) {
                 String[] countryInfo = possibleHeaders.split(",");
                 CountryFinancialResults countryFinancialResults = createCountryRecord(countryInfo);
-                stringCountryFinancialResultsHashMap.put(countryFinancialResults.getCountryName(),countryFinancialResults);
+                stringCountryFinancialResultsHashMap.put(countryFinancialResults.getCountryName(), countryFinancialResults);
             }
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
+                checkFormatting(line);
                 String[] countryInfo = line.split(",");
                 CountryFinancialResults countryFinancialResults = createCountryRecord(countryInfo);
                 stringCountryFinancialResultsHashMap.put(countryFinancialResults.getCountryName(), countryFinancialResults);
@@ -42,23 +42,51 @@ public class CountryService {
         return stringCountryFinancialResultsHashMap;
     }
 
-    private static boolean checkIfHasHeaders(String possibleHeaders){
+
+    private static boolean checkIfHasHeaders(String possibleHeaders) {
         String[] line = possibleHeaders.split(",");
         try {
             Double.parseDouble(line[2]);
             Double.parseDouble(line[3]);
-        }catch (InputMismatchException e){
+        } catch (NumberFormatException e) {
             System.out.println("Headers are present");
             return true;
         }
         return false;
     }
 
+    private static String checkFormatting(String inputStringArray){
+        String outputString = "";
+        if( inputStringArray.contains("$")){
+             outputString =  inputStringArray.replaceAll("$", "");
+             int columnsQuantity = outputString.split(",").length;
+             switch (columnsQuantity){
+                 case 4:
+                     return outputString;
+                     break;
+                 case 5:
+                     int lastComaPosition = outputString.lastIndexOf(",");
+                     int checkLength = outputString.substring(lastComaPosition).length();
+                     if(checkLength == 5){
+                         outputString =  outputString.replaceFirst(",\\d{3}.\\d{2}", outputString.substring(lastComaPosition));
+                         return outputString;
+                         break;
+                     }
+                     break;
+                 default:
+                     throw new InputMismatchException();
+
+             }
+
+        }
+
+
+    }
+
 
     //todo method that checks the accuracy of Line - isValidLine
     private static CountryFinancialResults createCountryRecord(String[] info) {
         //Regex format is: "Any number of digits . Any number of digits"
-        //TODO - RENAME
         Pattern digitDotDigit = Pattern.compile("\\d+.\\d+");
         Matcher matcherIndex2 = digitDotDigit.matcher(info[2]);
         Matcher matcherIndex3 = digitDotDigit.matcher(info[3]);
@@ -75,7 +103,9 @@ public class CountryService {
             }
         } else {
             //correct msg + print line which causes problem
-            throw new IllegalArgumentException("File is not read correctly, as the string is empty!");
+            System.out.println(Arrays.toString(info));
+            throw new IllegalArgumentException("File is not read correctly!");
+
         }
     }
 
@@ -86,30 +116,29 @@ public class CountryService {
 
         List<Map.Entry<String, CountryFinancialResults>> list = new ArrayList<>(inputMap.entrySet());
         list.sort(Map.Entry.comparingByValue());
-//TODO GET RID OF LinkedHashMap
-        Map<String, CountryFinancialResults> result = new LinkedHashMap<>();
+        Map<String, CountryFinancialResults> result = new HashMap<>();
+
         int i = 1;
         for (Map.Entry<String, CountryFinancialResults> record : list) {
             record.getValue().setRank(i);
             i++;
             result.put(record.getKey(), record.getValue());
         }
-        countyToIndexMap = new LinkedHashMap<>(result);
         return result;
     }
 
-    static void queryCountryIndex() {
+    static void queryCountryIndex(Map<String, CountryFinancialResults> inputMap) {
         System.out.println("Please enter a country: ");
         String requestedCountry = UserInputService.getStringFromCustomer();
         int i = 0;
-        if (countyToIndexMap.containsKey(requestedCountry)) {
-            CountryFinancialResults foundRecord = countyToIndexMap.get(requestedCountry);
+        if (inputMap.containsKey(requestedCountry)) {
+            CountryFinancialResults foundRecord = inputMap.get(requestedCountry);
             DecimalFormat df = new DecimalFormat("###,###");
             System.out.println(foundRecord.getCountryName() + " is " + foundRecord.getRank() + " country in the world to get the cheapest Big Mac. " +
                     "Average citizen of " + foundRecord.getCountryName() + " can buy " + df.format(foundRecord.getBigMacIndex()) + " burgers!");
         } else {
             System.out.println("No info, try another one");
-            queryCountryIndex();
+            queryCountryIndex(inputMap);
             i++;
             if (i == 3) {
                 throw new NoSuchElementException("Failed to find info about this country");

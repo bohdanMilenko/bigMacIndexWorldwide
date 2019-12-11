@@ -13,13 +13,8 @@ public class Main {
 
         CountryFinancialResults.printOverallResults(rankedCountries);
 
-        CountryService.queryCountryIndex();
+        CountryService.queryCountryIndex(rankedCountries);
 
-        //String boo = UserInputService.getStringFromCustomer();
-        //System.out.println(boo);
-
-        double bod = UserInputService.getNumberFromCustomer();
-        System.out.println(bod);
 
     }
 
