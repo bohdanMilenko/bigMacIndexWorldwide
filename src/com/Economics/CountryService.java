@@ -55,24 +55,45 @@ public class CountryService {
         return false;
     }
 
-    private static String checkFormatting(String inputStringArray) {
+    private static String checkFormatting(String inputString) {
         String outputString = "";
-        if (inputStringArray.contains("$")) {
-            outputString = inputStringArray.replaceAll("\\$", "");
-            int redundantComaPosition = outputString.lastIndexOf(",");
-            System.out.println(redundantComaPosition);
-            String copy = outputString;
-            outputString = outputString.substring(0,redundantComaPosition);
-            outputString = outputString + copy.substring(redundantComaPosition+1);
-            outputString = outputString.replaceAll(" ", "");
-            outputString = outputString.replace("\"","");
-
-            System.out.println(outputString);
-            return outputString;
+        int comasCount = 0;
+        for (int i = 0; i < inputString.length(); i++) {
+            if (inputString.charAt(i) == ',') {
+                comasCount++;
             }
-        return inputStringArray;
+        }
+        System.out.println(comasCount);
+        switch (comasCount) {
+            case 3:
+                outputString = cleanRecord(inputString);
+                System.out.println(outputString);
+                return outputString;
+            case 4:
+                String[] countryInfo = inputString.split(",");
+                for (String record : countryInfo) {
+                        record = cleanRecord(record);
+                        record = record.replaceAll(",", "");
+                        System.out.println(record);
+                    outputString = outputString + record + ",";
+                   }
+                    outputString = outputString.substring(0,outputString.length()-1);
+                int comaPlace = outputString.lastIndexOf(",");
+                StringBuilder sb = new StringBuilder(outputString);
+                sb.replace(comaPlace,comaPlace+1,"");
+                outputString = sb.toString();
+                return outputString;
+        }
+        return outputString;
     }
 
+    private static String cleanRecord(String inputString) {
+        String outputString = "";
+        outputString = inputString.replaceAll("\\$", "");
+        outputString = outputString.replaceAll(" ", "");
+        outputString = outputString.replace("\"", "");
+        return outputString;
+    }
 
     //todo method that checks the accuracy of Line - isValidLine
     private static CountryFinancialResults createCountryRecord(String[] info) {
@@ -102,7 +123,8 @@ public class CountryService {
     //TODO separate exception class to make it custom
 
 
-    public static Map<String, CountryFinancialResults> calculateBigMacIndex(Map<String, CountryFinancialResults> inputMap) {
+    public static Map<String, CountryFinancialResults> calculateBigMacIndex
+            (Map<String, CountryFinancialResults> inputMap) {
 
         List<Map.Entry<String, CountryFinancialResults>> list = new ArrayList<>(inputMap.entrySet());
         list.sort(Map.Entry.comparingByValue());
