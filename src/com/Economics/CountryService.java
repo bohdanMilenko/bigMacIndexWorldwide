@@ -30,7 +30,7 @@ public class CountryService {
             }
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                checkFormatting(line);
+                line = checkFormatting(line);
                 String[] countryInfo = line.split(",");
                 CountryFinancialResults countryFinancialResults = createCountryRecord(countryInfo);
                 stringCountryFinancialResultsHashMap.put(countryFinancialResults.getCountryName(), countryFinancialResults);
@@ -55,32 +55,22 @@ public class CountryService {
         return false;
     }
 
-    private static String checkFormatting(String inputStringArray){
+    private static String checkFormatting(String inputStringArray) {
         String outputString = "";
-        if( inputStringArray.contains("$")){
-             outputString =  inputStringArray.replaceAll("$", "");
-             int columnsQuantity = outputString.split(",").length;
-             switch (columnsQuantity){
-                 case 4:
-                     return outputString;
-                     break;
-                 case 5:
-                     int lastComaPosition = outputString.lastIndexOf(",");
-                     int checkLength = outputString.substring(lastComaPosition).length();
-                     if(checkLength == 5){
-                         outputString =  outputString.replaceFirst(",\\d{3}.\\d{2}", outputString.substring(lastComaPosition));
-                         return outputString;
-                         break;
-                     }
-                     break;
-                 default:
-                     throw new InputMismatchException();
+        if (inputStringArray.contains("$")) {
+            outputString = inputStringArray.replaceAll("\\$", "");
+            int redundantComaPosition = outputString.lastIndexOf(",");
+            System.out.println(redundantComaPosition);
+            String copy = outputString;
+            outputString = outputString.substring(0,redundantComaPosition);
+            outputString = outputString + copy.substring(redundantComaPosition+1);
+            outputString = outputString.replaceAll(" ", "");
+            outputString = outputString.replace("\"","");
 
-             }
-
-        }
-
-
+            System.out.println(outputString);
+            return outputString;
+            }
+        return inputStringArray;
     }
 
 
