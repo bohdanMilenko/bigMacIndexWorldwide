@@ -113,7 +113,6 @@ public class CountryService {
                 throw new IllegalArgumentException("Wrong type of data inside of file! Check if numbers are formatted as numbers");
             }
         } else {
-            //correct msg + print line which causes problem
             System.out.println(Arrays.toString(info));
             throw new IllegalArgumentException("File is not read correctly!");
 
