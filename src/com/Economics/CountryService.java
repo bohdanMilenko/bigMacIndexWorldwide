@@ -72,7 +72,7 @@ public class CountryService {
         }
         switch (comasCount) {
             case 3:
-                outputString = cleanLine(inputString);
+                outputString = cleanSingleRecord(inputString);
                 return outputString;
             case 4:
                 outputString = handleExtraComa(inputString);
@@ -86,38 +86,38 @@ public class CountryService {
         System.out.println(inputString);
         String outputString = "";
         outputString = inputString.replaceAll("\\$", "");
-        outputString = outputString.replaceAll(" ", "");
         outputString = outputString.replace("\"", "");
         System.out.println(outputString);
         return outputString;
     }
 
-    private static String cleanLine(String inputString) {
-        String outputString = "";
-        outputString = inputString.replaceAll("\\$", "");
-        outputString = outputString.replace("\"", "");
-        String[] line = outputString.split(",");
-        String innerLoopString = "";
-        String record ="";
-        for(int i =2;i< line.length;i++){
-            record = line[i].replaceAll(" ", "");
-            innerLoopString =  innerLoopString + "," + record;
-        }
-        outputString = line[0] + "," + line[1] + innerLoopString;
-        return outputString;
-    }
+//    private static String cleanLine(String inputString) {
+//        String outputString = "";
+//        outputString = inputString.replaceAll("\\$", "");
+//        outputString = outputString.replace("\"", "");
+//        String[] line = outputString.split(",");
+//        String innerLoopString = "";
+//        String record ="";
+//        for(int i =2;i< line.length;i++){
+//            record = line[i].replaceAll(" ", "");
+//            innerLoopString =  innerLoopString + "," + record;
+//        }
+//        outputString = line[0] + "," + line[1] + innerLoopString;
+//        return outputString;
+//    }
 
 
     private static String handleExtraComa(String inputString) {
         String outputString = "";
         String[] countryInfo = inputString.split(",");
-        for (int i = 1; i < countryInfo.length;i++) {
+        for (int i = 2; i < countryInfo.length;i++) {
             String record = countryInfo[i];
             record = cleanSingleRecord(record);
+            record = record.replaceAll(" ", "");
             record = record.replaceAll(",", "");
-            outputString = outputString + record + ",";
+            outputString = outputString + "," + record  ;
         }
-        outputString = countryInfo[0] + "," + outputString;
+        outputString = countryInfo[0] + "," + countryInfo[1] +  outputString;
         outputString = outputString.substring(0, outputString.length() - 1);
         int comaPlace = outputString.lastIndexOf(",");
         StringBuilder sb = new StringBuilder(outputString);
