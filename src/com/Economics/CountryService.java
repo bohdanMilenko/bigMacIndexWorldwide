@@ -6,6 +6,7 @@ import CustomExceptions.IncorrectlyProcessedStringFormatException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -19,7 +20,6 @@ public class CountryService {
     /**
      * @return
      */
-
     //One functional - change to increase abstraction - check for headers
     //Optional interface - wrapper
     public static Map<String, CountryFinancialResults> loadData(String filePath) {
@@ -50,7 +50,7 @@ public class CountryService {
 
 
     private static boolean checkIfHasHeaders(String possibleHeaders) {
-        String headers = cleanRecord(possibleHeaders);
+        String headers = cleanSingleRecord(possibleHeaders);
         String[] line = headers.split(",");
         try {
             Double.parseDouble(line[2]);
@@ -72,7 +72,7 @@ public class CountryService {
         }
         switch (comasCount) {
             case 3:
-                outputString = cleanRecord(inputString,false);
+                outputString = cleanLine(inputString);
                 return outputString;
             case 4:
                 outputString = handleExtraComa(inputString);
@@ -82,35 +82,47 @@ public class CountryService {
         }
     }
 
-    private static String cleanRecord(String inputString) {
+    private static String cleanSingleRecord(String inputString) {
+        System.out.println(inputString);
         String outputString = "";
         outputString = inputString.replaceAll("\\$", "");
         outputString = outputString.replaceAll(" ", "");
         outputString = outputString.replace("\"", "");
+        System.out.println(outputString);
         return outputString;
     }
 
-    private static String cleanRecord(String inputString, boolean spaceRemoval) {
+    private static String cleanLine(String inputString) {
         String outputString = "";
         outputString = inputString.replaceAll("\\$", "");
-        //outputString = outputString.replaceAll(" ", "");
         outputString = outputString.replace("\"", "");
+        String[] line = outputString.split(",");
+        String innerLoopString = "";
+        String record ="";
+        for(int i =2;i< line.length;i++){
+            record = line[i].replaceAll(" ", "");
+            innerLoopString =  innerLoopString + "," + record;
+        }
+        outputString = line[0] + "," + line[1] + innerLoopString;
         return outputString;
     }
+
 
     private static String handleExtraComa(String inputString) {
         String outputString = "";
         String[] countryInfo = inputString.split(",");
-        for (String record : countryInfo) {
-            record = cleanRecord(record);
+        for (int i = 1; i < countryInfo.length;i++) {
+            String record = countryInfo[i];
+            record = cleanSingleRecord(record);
             record = record.replaceAll(",", "");
-            System.out.println(record);
             outputString = outputString + record + ",";
         }
+        outputString = countryInfo[0] + "," + outputString;
         outputString = outputString.substring(0, outputString.length() - 1);
         int comaPlace = outputString.lastIndexOf(",");
         StringBuilder sb = new StringBuilder(outputString);
         sb.replace(comaPlace, comaPlace + 1, "");
+        System.out.println(sb.toString());
         return sb.toString();
     }
 

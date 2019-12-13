@@ -1,18 +1,18 @@
-﻿country,currencyCode,    dollarPrice    ,    averageIncome    
-Australia,AUD,4.26,53349.41
-Canada,CAD,5.16,48848.52
-Switzerland,CHF,6.54,64108.55
-Chile,CLP,3.83,27124.71
-Czech Republic,CZK,3.73,26961.58
-Denmark,DKK,4.5,55253.34
-Britain,GBP,4.1,44770.05
-Hungary,HUF,3.1,24454.71
-Israel,ILS,4.77,37655.3
-Japan,JPY,3.59,40573.38
-South Korea,KRW,3.81,39471.71
-Mexico,MXN,2.65,16297.71
-Norway,NOK,4.85,50955.83
-New Zealand,NZD,4.23,42324.87
-Poland,PLN,2.84,29109.04
-Sweden,SEK,5.38,44196.24
-United States,USD,5.74,63093.01
+﻿country,currencyCode, dollarPrice    , averageIncome     
+Australia,AUD,4.26," $53,349.41 "
+Canada,CAD,5.16," $48,848.52 "
+Switzerland,CHF,6.54," $64,108.55 "
+Chile,CLP,3.83," $27,124.71 "
+Czech Republic,CZK,3.73," $26,961.58 "
+Denmark,DKK,4.5," $55,253.34 "
+Britain,GBP,4.1," $44,770.05 "
+Hungary,HUF,3.1," $24,454.71 "
+Israel,ILS,4.77," $37,655.30 "
+Japan,JPY,3.59," $40,573.38 "
+South Korea,KRW,3.81," $39,471.71 "
+Mexico,MXN,2.65," $16,297.71 "
+Norway,NOK,4.85," $50,955.83 "
+New Zealand,NZD,4.23," $42,324.87 "
+Poland,PLN,2.84," $29,109.04 "
+Sweden,SEK,5.38," $44,196.24 "
+United States,USD,5.74," $63,093.01 "
