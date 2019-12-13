@@ -1,5 +1,8 @@
 package com.Economics;
 
+import CustomExceptions.IncorrectCSVFormatException;
+import CustomExceptions.IncorrectlyProcessedStringFormatException;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -31,6 +34,9 @@ public class CountryService {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 line = checkFormatting(line);
+                if(line.equals("")){
+                    throw new IncorrectlyProcessedStringFormatException("Line contained more comas than expected!");
+                }
                 String[] countryInfo = line.split(",");
                 CountryFinancialResults countryFinancialResults = createCountryRecord(countryInfo);
                 stringCountryFinancialResultsHashMap.put(countryFinancialResults.getCountryName(), countryFinancialResults);
@@ -44,7 +50,8 @@ public class CountryService {
 
 
     private static boolean checkIfHasHeaders(String possibleHeaders) {
-        String[] line = possibleHeaders.split(",");
+        String headers = cleanRecord(possibleHeaders);
+        String[] line = headers.split(",");
         try {
             Double.parseDouble(line[2]);
             Double.parseDouble(line[3]);
@@ -63,28 +70,16 @@ public class CountryService {
                 comasCount++;
             }
         }
-        System.out.println(comasCount);
         switch (comasCount) {
             case 3:
-                outputString = cleanRecord(inputString);
-                System.out.println(outputString);
+                outputString = cleanRecord(inputString,false);
                 return outputString;
             case 4:
-                String[] countryInfo = inputString.split(",");
-                for (String record : countryInfo) {
-                        record = cleanRecord(record);
-                        record = record.replaceAll(",", "");
-                        System.out.println(record);
-                    outputString = outputString + record + ",";
-                   }
-                    outputString = outputString.substring(0,outputString.length()-1);
-                int comaPlace = outputString.lastIndexOf(",");
-                StringBuilder sb = new StringBuilder(outputString);
-                sb.replace(comaPlace,comaPlace+1,"");
-                outputString = sb.toString();
+                outputString = handleExtraComa(inputString);
+                return outputString;
+            default:
                 return outputString;
         }
-        return outputString;
     }
 
     private static String cleanRecord(String inputString) {
@@ -93,6 +88,30 @@ public class CountryService {
         outputString = outputString.replaceAll(" ", "");
         outputString = outputString.replace("\"", "");
         return outputString;
+    }
+
+    private static String cleanRecord(String inputString, boolean spaceRemoval) {
+        String outputString = "";
+        outputString = inputString.replaceAll("\\$", "");
+        //outputString = outputString.replaceAll(" ", "");
+        outputString = outputString.replace("\"", "");
+        return outputString;
+    }
+
+    private static String handleExtraComa(String inputString) {
+        String outputString = "";
+        String[] countryInfo = inputString.split(",");
+        for (String record : countryInfo) {
+            record = cleanRecord(record);
+            record = record.replaceAll(",", "");
+            System.out.println(record);
+            outputString = outputString + record + ",";
+        }
+        outputString = outputString.substring(0, outputString.length() - 1);
+        int comaPlace = outputString.lastIndexOf(",");
+        StringBuilder sb = new StringBuilder(outputString);
+        sb.replace(comaPlace, comaPlace + 1, "");
+        return sb.toString();
     }
 
     //todo method that checks the accuracy of Line - isValidLine
@@ -110,11 +129,11 @@ public class CountryService {
                 double averageSalary = Double.parseDouble(info[3]);
                 return new CountryFinancialResults(countryName, currencyAbbreviation, bigMacPrice, averageSalary);
             } else {
-                throw new IllegalArgumentException("Wrong type of data inside of file! Check if numbers are formatted as numbers");
+                throw new IncorrectCSVFormatException("Wrong type of data inside of file! Check if numbers are formatted as numbers");
             }
         } else {
             System.out.println(Arrays.toString(info));
-            throw new IllegalArgumentException("File is not read correctly!");
+            throw new IncorrectCSVFormatException("File is not read correctly! Contains more than 4 variables in line.");
 
         }
     }
@@ -122,13 +141,10 @@ public class CountryService {
     //TODO separate exception class to make it custom
 
 
-    public static Map<String, CountryFinancialResults> calculateBigMacIndex
-            (Map<String, CountryFinancialResults> inputMap) {
-
+    public static Map<String, CountryFinancialResults> calculateBigMacIndex(Map<String, CountryFinancialResults> inputMap) {
         List<Map.Entry<String, CountryFinancialResults>> list = new ArrayList<>(inputMap.entrySet());
         list.sort(Map.Entry.comparingByValue());
         Map<String, CountryFinancialResults> result = new HashMap<>();
-
         int i = 1;
         for (Map.Entry<String, CountryFinancialResults> record : list) {
             record.getValue().setRank(i);
