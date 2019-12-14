@@ -1,12 +1,10 @@
 package com.Economics;
 
-import CustomExceptions.IncorrectCSVFormatException;
 import CustomExceptions.IncorrectlyProcessedStringFormatException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -14,8 +12,7 @@ import java.util.regex.Pattern;
 
 public class CountryService {
 
-    private static Map<String, CountryFinancialResults> countyToIndexMap;
-
+    public static final String UTF8_BOM = "\uFEFF";
 
     /**
      * @return
@@ -27,20 +24,25 @@ public class CountryService {
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(filePath)))) {
             String possibleHeaders = scanner.nextLine();
             if (!checkIfHasHeaders(possibleHeaders)) {
+                possibleHeaders = isValidLine(possibleHeaders);
+                if(possibleHeaders.startsWith(UTF8_BOM)){
+                    possibleHeaders = possibleHeaders.substring(1);
+                }
                 String[] countryInfo = possibleHeaders.split(",");
                 CountryFinancialResults countryFinancialResults = createCountryRecord(countryInfo);
                 stringCountryFinancialResultsHashMap.put(countryFinancialResults.getCountryName(), countryFinancialResults);
             }
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                line = checkFormatting(line);
-                if(line.equals("")){
+                line = isValidLine(line);
+                if (line.equals("")) {
                     throw new IncorrectlyProcessedStringFormatException("Line contained more comas than expected!");
                 }
                 String[] countryInfo = line.split(",");
                 CountryFinancialResults countryFinancialResults = createCountryRecord(countryInfo);
                 stringCountryFinancialResultsHashMap.put(countryFinancialResults.getCountryName(), countryFinancialResults);
             }
+           // stringCountryFinancialResultsHashMap.forEach( (k,v) -> System.out.println(v.toString()));
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -59,10 +61,11 @@ public class CountryService {
             System.out.println("Headers are present");
             return true;
         }
+        System.out.println("No headers in the csv");
         return false;
     }
 
-    private static String checkFormatting(String inputString) {
+    private static String isValidLine(String inputString) {
         String outputString = "";
         int comasCount = 0;
         for (int i = 0; i < inputString.length(); i++) {
@@ -83,42 +86,25 @@ public class CountryService {
     }
 
     private static String cleanSingleRecord(String inputString) {
-        System.out.println(inputString);
         String outputString = "";
         outputString = inputString.replaceAll("\\$", "");
         outputString = outputString.replace("\"", "");
-        System.out.println(outputString);
         return outputString;
     }
-
-//    private static String cleanLine(String inputString) {
-//        String outputString = "";
-//        outputString = inputString.replaceAll("\\$", "");
-//        outputString = outputString.replace("\"", "");
-//        String[] line = outputString.split(",");
-//        String innerLoopString = "";
-//        String record ="";
-//        for(int i =2;i< line.length;i++){
-//            record = line[i].replaceAll(" ", "");
-//            innerLoopString =  innerLoopString + "," + record;
-//        }
-//        outputString = line[0] + "," + line[1] + innerLoopString;
-//        return outputString;
-//    }
-
 
     private static String handleExtraComa(String inputString) {
         String outputString = "";
         String[] countryInfo = inputString.split(",");
-        for (int i = 2; i < countryInfo.length;i++) {
+        for (int i = 2; i < countryInfo.length; i++) {
             String record = countryInfo[i];
             record = cleanSingleRecord(record);
             record = record.replaceAll(" ", "");
             record = record.replaceAll(",", "");
-            outputString = outputString + "," + record  ;
+            outputString = outputString + "," + record;
         }
-        outputString = countryInfo[0] + "," + countryInfo[1] +  outputString;
-        outputString = outputString.substring(0, outputString.length() - 1);
+        String countryName = cleanSingleRecord(countryInfo[0]);
+        String countryCurrency = cleanSingleRecord(countryInfo[1]);
+        outputString = countryName + "," + countryCurrency + outputString;
         int comaPlace = outputString.lastIndexOf(",");
         StringBuilder sb = new StringBuilder(outputString);
         sb.replace(comaPlace, comaPlace + 1, "");
@@ -126,7 +112,6 @@ public class CountryService {
         return sb.toString();
     }
 
-    //todo method that checks the accuracy of Line - isValidLine
     private static CountryFinancialResults createCountryRecord(String[] info) {
         //Regex format is: "Any number of digits . Any number of digits"
         Pattern digitDotDigit = Pattern.compile("\\d+.\\d+");
@@ -141,16 +126,15 @@ public class CountryService {
                 double averageSalary = Double.parseDouble(info[3]);
                 return new CountryFinancialResults(countryName, currencyAbbreviation, bigMacPrice, averageSalary);
             } else {
-                throw new IncorrectCSVFormatException("Wrong type of data inside of file! Check if numbers are formatted as numbers");
+                System.out.println(Arrays.toString(info));
+                throw new IncorrectlyProcessedStringFormatException("Wrong type of data inside of file! Check if numbers are formatted as numbers");
             }
         } else {
             System.out.println(Arrays.toString(info));
-            throw new IncorrectCSVFormatException("File is not read correctly! Contains more than 4 variables in line.");
+            throw new IncorrectlyProcessedStringFormatException("File is not read correctly! Contains more than 4 variables in line.");
 
         }
     }
-
-    //TODO separate exception class to make it custom
 
 
     public static Map<String, CountryFinancialResults> calculateBigMacIndex(Map<String, CountryFinancialResults> inputMap) {

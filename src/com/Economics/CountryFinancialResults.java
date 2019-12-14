@@ -65,5 +65,8 @@ public class CountryFinancialResults implements Comparable<CountryFinancialResul
         }
     }
 
-
+    @Override
+    public String toString() {
+        return this.countryName +": \n" + "\t" + this.pricePerBigMac +  "\n\t" + this.averageSalary;
+    }
 }
