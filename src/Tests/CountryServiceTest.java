@@ -51,6 +51,24 @@ public class CountryServiceTest {
     @Test
     void loadDataNoHeadersPresent() {
         Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithoutHeaders);
+
+        countryToStatistics.forEach((k, v) -> System.out.println(v.toString()));
+        assertionChecker(countryToStatistics);
+    }
+
+
+    void assertionChecker(Map<String, CountryFinancialResults> countryToStatistics) {
+        CountryFinancialResults australia = countryToStatistics.get(countryName);
+        System.out.println(australia.toString());
+        assertEquals(17, countryToStatistics.size());
+        assertEquals(countryName, australia.getCountryName());
+        assertEquals(countryCurrency, australia.getCurrencyAbbreviation());
+        assertEquals(countryPricePerBurger, australia.getPricePerBigMac());
+        assertEquals(countryAverageSalary, australia.getAverageSalary());
+    }
+
+    //Helped to identify BOM present before first record. BOM preventing from finding "Australia", but this country was actually loaded.
+    void checkEachCountryPresentAfterLoad(Map<String, CountryFinancialResults> countryToStatistics){
         System.out.println(countryToStatistics.containsKey("Australia"));
         System.out.println(countryToStatistics.containsKey("Hungary"));
         System.out.println(countryToStatistics.containsKey("United States"));
@@ -68,19 +86,6 @@ public class CountryServiceTest {
         System.out.println(countryToStatistics.containsKey("Mexico"));
         System.out.println(countryToStatistics.containsKey("Israel"));
         System.out.println(countryToStatistics.containsKey("Chile"));
-        countryToStatistics.forEach((k, v) -> System.out.println(v.toString()));
-        assertionChecker(countryToStatistics);
-    }
-
-
-    void assertionChecker(Map<String, CountryFinancialResults> countryToStatistics) {
-        CountryFinancialResults australia = countryToStatistics.get(countryName);
-        System.out.println(australia.toString());
-        assertEquals(17, countryToStatistics.size());
-        assertEquals(countryName, australia.getCountryName());
-        assertEquals(countryCurrency, australia.getCurrencyAbbreviation());
-        assertEquals(countryPricePerBurger, australia.getPricePerBigMac());
-        assertEquals(countryAverageSalary, australia.getAverageSalary());
     }
 
 }
