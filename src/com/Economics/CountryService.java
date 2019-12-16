@@ -92,14 +92,20 @@ public class CountryService {
         return outputString;
     }
 
+    private static String additionalRecordCleaning(String record) {
+        String outputString = record;
+        outputString = outputString.replaceAll(" ", "");
+        outputString = outputString.replaceAll(",", "");
+        return outputString;
+    }
+
     private static String handleExtraComa(String inputString) {
         String outputString = "";
         String[] countryInfo = inputString.split(",");
         for (int i = 2; i < countryInfo.length; i++) {
             String record = countryInfo[i];
             record = cleanSingleRecord(record);
-            record = record.replaceAll(" ", "");
-            record = record.replaceAll(",", "");
+            record = additionalRecordCleaning(record);
             outputString = outputString + "," + record;
         }
         String countryName = cleanSingleRecord(countryInfo[0]);
@@ -117,16 +123,18 @@ public class CountryService {
         Pattern digitDotDigit = Pattern.compile("\\d+.\\d+");
         Matcher matcherIndex2 = digitDotDigit.matcher(info[2]);
         Matcher matcherIndex3 = digitDotDigit.matcher(info[3]);
-
+        int i = 0;
         if (info.length == 4) {
             if (matcherIndex2.matches() && matcherIndex3.matches()) {
                 String countryName = info[0];
                 String currencyAbbreviation = info[1];
                 double bigMacPrice = Double.parseDouble(info[2]);
                 double averageSalary = Double.parseDouble(info[3]);
+                i = 0;
                 return new CountryFinancialResults(countryName, currencyAbbreviation, bigMacPrice, averageSalary);
             } else {
-                System.out.println(Arrays.toString(info));
+                System.out.println("Line had extra space"+Arrays.toString(info));
+
                 throw new IncorrectlyProcessedStringFormatException("Wrong type of data inside of file! Check if numbers are formatted as numbers");
             }
         } else {

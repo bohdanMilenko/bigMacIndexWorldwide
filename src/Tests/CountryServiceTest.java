@@ -24,50 +24,82 @@ public class CountryServiceTest {
 
 
     @Test
-    void loadDataNoFormattingApplied() {
+    void loadDataNoFormattingAppliedMapSizeTest() {
         Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithNoFormattingApplied);
-        assertionChecker(countryToStatistics);
+        mapSizeChecker(countryToStatistics);
     }
 
     @Test
-    void loadDataAverageSalaryAccountingFormat() {
+    void loadDataAverageSalaryAccountingFormatMapSizeTest() {
         Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithFormattedAverageSalary);
-        System.out.println(countryToStatistics.size());
-        assertionChecker(countryToStatistics);
+        mapSizeChecker(countryToStatistics);
     }
 
     @Test
-    void loadDataBurgerPriceAccountingFormat() {
+    void loadDataBurgerPriceAccountingFormatMapSizeTest() {
         Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithFormattedBurgerPrice);
-        assertionChecker(countryToStatistics);
+        mapSizeChecker(countryToStatistics);
     }
 
     @Test
-    void loadDataDoublesFormattedAsAccounting() {
+    void loadDataDoublesFormattedAsAccountingMapSizeTest() {
         Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithFormattedNumbers);
-        assertionChecker(countryToStatistics);
+        mapSizeChecker(countryToStatistics);
     }
 
     @Test
-    void loadDataNoHeadersPresent() {
+    void loadDataNoHeadersPresentMapSizeTest() {
         Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithoutHeaders);
-
         countryToStatistics.forEach((k, v) -> System.out.println(v.toString()));
-        assertionChecker(countryToStatistics);
+        mapSizeChecker(countryToStatistics);
     }
 
 
-    void assertionChecker(Map<String, CountryFinancialResults> countryToStatistics) {
+    void mapSizeChecker(Map<String, CountryFinancialResults> countryToStatistics) {
         CountryFinancialResults australia = countryToStatistics.get(countryName);
-        System.out.println(australia.toString());
         assertEquals(17, countryToStatistics.size());
+    }
+
+    @Test
+    void loadDataNoFormattingAppliedRecordAccuracyTest() {
+        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithNoFormattingApplied);
+        recordDetailsChecker(countryToStatistics);
+    }
+
+    @Test
+    void loadDataAverageSalaryAccountingFormatRecordAccuracyTest() {
+        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithFormattedAverageSalary);
+        recordDetailsChecker(countryToStatistics);
+    }
+
+    @Test
+    void loadDataBurgerPriceAccountingFormatRecordAccuracyTest() {
+        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithFormattedBurgerPrice);
+        recordDetailsChecker(countryToStatistics);
+    }
+
+    @Test
+    void loadDataDoublesFormattedAsAccountingRecordAccuracyTest() {
+        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithFormattedNumbers);
+        recordDetailsChecker(countryToStatistics);
+    }
+
+    @Test
+    void loadDataNoHeadersPresentRecordAccuracyTest() {
+        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithoutHeaders);
+        recordDetailsChecker(countryToStatistics);
+    }
+
+    void recordDetailsChecker(Map<String, CountryFinancialResults> countryToStatistics) {
+        CountryFinancialResults australia = countryToStatistics.get(countryName);
         assertEquals(countryName, australia.getCountryName());
         assertEquals(countryCurrency, australia.getCurrencyAbbreviation());
         assertEquals(countryPricePerBurger, australia.getPricePerBigMac());
         assertEquals(countryAverageSalary, australia.getAverageSalary());
     }
 
-    //Helped to identify BOM present before first record. BOM preventing from finding "Australia", but this country was actually loaded.
+
+    //Helped to identify BOM present before first record. BOM prevented from finding "Australia", as first record was read as "\ufeffAustralia"
     void checkEachCountryPresentAfterLoad(Map<String, CountryFinancialResults> countryToStatistics){
         System.out.println(countryToStatistics.containsKey("Australia"));
         System.out.println(countryToStatistics.containsKey("Hungary"));
