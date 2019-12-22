@@ -12,14 +12,14 @@ import java.util.regex.Pattern;
 
 public class CountryService {
 
-    public static final String UTF8_BOM = "\uFEFF";
+    private static final String UTF8_BOM = "\uFEFF";
 
     /**
      * @return
      */
     //One functional - change to increase abstraction - check for headers
     //Optional interface - wrapper
-    public static Map<String, CountryFinancialResults> loadData(String filePath) {
+    public  Map<String, CountryFinancialResults> loadData(String filePath) {
         Map<String, CountryFinancialResults> stringCountryFinancialResultsHashMap = new HashMap<>();
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(filePath)))) {
             String possibleHeaders = scanner.nextLine();
@@ -51,7 +51,7 @@ public class CountryService {
     }
 
 
-    private static boolean checkIfHasHeaders(String possibleHeaders) {
+    private  boolean checkIfHasHeaders(String possibleHeaders) {
         String headers = cleanStringInput(possibleHeaders);
         String[] line = headers.split(",");
         try {
@@ -65,7 +65,7 @@ public class CountryService {
         return false;
     }
 
-    private static String isValidLine(String inputString) {
+    private  String isValidLine(String inputString) {
         String outputString = "";
         int comasCount = 0;
         for (int i = 0; i < inputString.length(); i++) {
@@ -85,7 +85,7 @@ public class CountryService {
         }
     }
 
-    private static String ensureIfDigitsAreValid(String inputString){
+    private  String ensureIfDigitsAreValid(String inputString){
         String outputString = "";
         String[] countryInfo = inputString.split(",");
         for (int i = 2; i < countryInfo.length; i++) {
@@ -99,14 +99,14 @@ public class CountryService {
         return outputString;
     }
 
-    private static String cleanStringInput(String inputString) {
+    private  String cleanStringInput(String inputString) {
         String outputString = "";
         outputString = inputString.replaceAll("\\$", "");
         outputString = outputString.replace("\"", "");
         return outputString;
     }
 
-    private  static String cleanDigit(String record){
+    private   String cleanDigit(String record){
         String outputString = record;
         outputString = outputString.replaceAll(" ", "");
         outputString = outputString.replaceAll(",", "");
@@ -116,7 +116,7 @@ public class CountryService {
     }
 
 
-    private static String handleExtraComa(String inputString) {
+    private  String handleExtraComa(String inputString) {
         String outputString = ensureIfDigitsAreValid(inputString);
         int comaPlace = outputString.lastIndexOf(",");
         StringBuilder sb = new StringBuilder(outputString);
@@ -126,7 +126,7 @@ public class CountryService {
     }
 
 
-    private static CountryFinancialResults createCountryRecord(String[] info) {
+    private  CountryFinancialResults createCountryRecord(String[] info) {
         //Regex format is: "Any number of digits . Any number of digits"
         Pattern digitDotDigit = Pattern.compile("\\d+.\\d+");
         Matcher matcherIndex2 = digitDotDigit.matcher(info[2]);
@@ -153,7 +153,7 @@ public class CountryService {
     }
 
 
-    public static Map<String, CountryFinancialResults> calculateBigMacIndex(Map<String, CountryFinancialResults> inputMap) {
+    public  Map<String, CountryFinancialResults> calculateBigMacIndex(Map<String, CountryFinancialResults> inputMap) {
         List<Map.Entry<String, CountryFinancialResults>> list = new ArrayList<>(inputMap.entrySet());
         list.sort(Map.Entry.comparingByValue());
         Map<String, CountryFinancialResults> result = new HashMap<>();
@@ -166,7 +166,7 @@ public class CountryService {
         return result;
     }
 
-    static void queryCountryIndex(Map<String, CountryFinancialResults> inputMap) {
+     void queryCountryIndex(Map<String, CountryFinancialResults> inputMap) {
         System.out.println("Please enter a country: ");
         String requestedCountry = UserInputService.getStringFromCustomer();
         int i = 0;

@@ -2,6 +2,7 @@ package Tests;
 
 import com.Economics.CountryFinancialResults;
 import com.Economics.CountryService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -9,7 +10,8 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CountryServiceTest {
-    Map<String, CountryFinancialResults> countryToStatistics;
+
+    private static CountryService countryService;
 
     private final String countryName = "Australia";
     private final String countryCurrency = "AUD";
@@ -22,34 +24,38 @@ public class CountryServiceTest {
     public static final String fileWithFormattedNumbers = "testDataSets/bigMacData_testData_doublesFormattedAsAccounting.csv";
     public static final String fileWithoutHeaders = "testDataSets/bigMacData_testData_noHeaders.csv";
 
+    @BeforeEach
+    void beforeEach(){
+        countryService = new CountryService();
+    }
 
     @Test
     void loadDataNoFormattingAppliedMapSizeTest() {
-        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithNoFormattingApplied);
+        Map<String, CountryFinancialResults> countryToStatistics = countryService.loadData(fileWithNoFormattingApplied);
         mapSizeChecker(countryToStatistics);
     }
 
     @Test
     void loadDataAverageSalaryAccountingFormatMapSizeTest() {
-        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithFormattedAverageSalary);
+        Map<String, CountryFinancialResults> countryToStatistics = countryService.loadData(fileWithFormattedAverageSalary);
         mapSizeChecker(countryToStatistics);
     }
 
     @Test
     void loadDataBurgerPriceAccountingFormatMapSizeTest() {
-        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithFormattedBurgerPrice);
+        Map<String, CountryFinancialResults> countryToStatistics = countryService.loadData(fileWithFormattedBurgerPrice);
         mapSizeChecker(countryToStatistics);
     }
 
     @Test
     void loadDataDoublesFormattedAsAccountingMapSizeTest() {
-        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithFormattedNumbers);
+        Map<String, CountryFinancialResults> countryToStatistics = countryService.loadData(fileWithFormattedNumbers);
         mapSizeChecker(countryToStatistics);
     }
 
     @Test
     void loadDataNoHeadersPresentMapSizeTest() {
-        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithoutHeaders);
+        Map<String, CountryFinancialResults> countryToStatistics = countryService.loadData(fileWithoutHeaders);
         countryToStatistics.forEach((k, v) -> System.out.println(v.toString()));
         mapSizeChecker(countryToStatistics);
     }
@@ -62,31 +68,31 @@ public class CountryServiceTest {
 
     @Test
     void loadDataNoFormattingAppliedRecordAccuracyTest() {
-        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithNoFormattingApplied);
+        Map<String, CountryFinancialResults> countryToStatistics = countryService.loadData(fileWithNoFormattingApplied);
         recordDetailsChecker(countryToStatistics);
     }
 
     @Test
     void loadDataAverageSalaryAccountingFormatRecordAccuracyTest() {
-        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithFormattedAverageSalary);
+        Map<String, CountryFinancialResults> countryToStatistics = countryService.loadData(fileWithFormattedAverageSalary);
         recordDetailsChecker(countryToStatistics);
     }
 
     @Test
     void loadDataBurgerPriceAccountingFormatRecordAccuracyTest() {
-        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithFormattedBurgerPrice);
+        Map<String, CountryFinancialResults> countryToStatistics = countryService.loadData(fileWithFormattedBurgerPrice);
         recordDetailsChecker(countryToStatistics);
     }
 
     @Test
     void loadDataDoublesFormattedAsAccountingRecordAccuracyTest() {
-        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithFormattedNumbers);
+        Map<String, CountryFinancialResults> countryToStatistics = countryService.loadData(fileWithFormattedNumbers);
         recordDetailsChecker(countryToStatistics);
     }
 
     @Test
     void loadDataNoHeadersPresentRecordAccuracyTest() {
-        Map<String, CountryFinancialResults> countryToStatistics = CountryService.loadData(fileWithoutHeaders);
+        Map<String, CountryFinancialResults> countryToStatistics = countryService.loadData(fileWithoutHeaders);
         recordDetailsChecker(countryToStatistics);
     }
 
