@@ -52,7 +52,7 @@ public class CountryService {
 
 
     private static boolean checkIfHasHeaders(String possibleHeaders) {
-        String headers = cleanSingleRecord(possibleHeaders);
+        String headers = cleanStringInput(possibleHeaders);
         String[] line = headers.split(",");
         try {
             Double.parseDouble(line[2]);
@@ -75,7 +75,7 @@ public class CountryService {
         }
         switch (comasCount) {
             case 3:
-                outputString = cleanSingleRecord(inputString);
+                outputString = ensureIfDigitsAreValid(inputString);
                 return outputString;
             case 4:
                 outputString = handleExtraComa(inputString);
@@ -85,38 +85,46 @@ public class CountryService {
         }
     }
 
-    private static String cleanSingleRecord(String inputString) {
+    private static String ensureIfDigitsAreValid(String inputString){
+        String outputString = "";
+        String[] countryInfo = inputString.split(",");
+        for (int i = 2; i < countryInfo.length; i++) {
+            String record = countryInfo[i];
+            record = cleanDigit(record);
+            outputString = outputString + "," + record;
+        }
+        String countryName = cleanStringInput(countryInfo[0]);
+        String countryCurrency = cleanStringInput(countryInfo[1]);
+        outputString = countryName + "," + countryCurrency + outputString;
+        return outputString;
+    }
+
+    private static String cleanStringInput(String inputString) {
         String outputString = "";
         outputString = inputString.replaceAll("\\$", "");
         outputString = outputString.replace("\"", "");
         return outputString;
     }
 
-    private static String additionalRecordCleaning(String record) {
+    private  static String cleanDigit(String record){
         String outputString = record;
         outputString = outputString.replaceAll(" ", "");
         outputString = outputString.replaceAll(",", "");
+        outputString = outputString.replaceAll("\\$", "");
+        outputString = outputString.replace("\"", "");
         return outputString;
     }
 
+
     private static String handleExtraComa(String inputString) {
-        String outputString = "";
-        String[] countryInfo = inputString.split(",");
-        for (int i = 2; i < countryInfo.length; i++) {
-            String record = countryInfo[i];
-            record = cleanSingleRecord(record);
-            record = additionalRecordCleaning(record);
-            outputString = outputString + "," + record;
-        }
-        String countryName = cleanSingleRecord(countryInfo[0]);
-        String countryCurrency = cleanSingleRecord(countryInfo[1]);
-        outputString = countryName + "," + countryCurrency + outputString;
+        String outputString = ensureIfDigitsAreValid(inputString);
         int comaPlace = outputString.lastIndexOf(",");
         StringBuilder sb = new StringBuilder(outputString);
         sb.replace(comaPlace, comaPlace + 1, "");
         System.out.println(sb.toString());
         return sb.toString();
     }
+
 
     private static CountryFinancialResults createCountryRecord(String[] info) {
         //Regex format is: "Any number of digits . Any number of digits"
