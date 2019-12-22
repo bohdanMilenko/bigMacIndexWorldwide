@@ -12,13 +12,14 @@ public class Main {
 
         Map<String, CountryFinancialResults> countryToStatistics = countryService.loadData(CountryServiceTest.fileWithoutHeaders);
 
+
         Map<String, CountryFinancialResults> rankedCountries = countryService.calculateBigMacIndex(countryToStatistics);
 
         rankedCountries.forEach((k,v)-> System.out.println(k +": " + v.getCountryName() +" " + v.getPricePerBigMac() + " " + v.getAverageSalary()));
 
-        CountryFinancialResults.printOverallResults(rankedCountries);
+        countryService.printOverallResults(rankedCountries);
 
-        countryService.queryCountryIndex(rankedCountries);
+        countryService.retrieveInfoAboutCountry(rankedCountries);
 
 
     }

@@ -48,11 +48,6 @@ public class CountryFinancialResults implements Comparable<CountryFinancialResul
         return averageSalary;
     }
 
-    public static void printOverallResults(Map<String, CountryFinancialResults> rankedCountries) {
-        DecimalFormat df = new DecimalFormat("#");
-        rankedCountries.forEach((k, v) -> System.out.println(v.getRank() + ". " + k + ". People in " + v.getCountryName() + " can purchase "
-                + df.format(v.getAverageSalary() / v.getPricePerBigMac()) + " burgers."));
-    }
 
     @Override
     public int compareTo(CountryFinancialResults o) {
@@ -67,6 +62,6 @@ public class CountryFinancialResults implements Comparable<CountryFinancialResul
 
     @Override
     public String toString() {
-        return this.countryName +": \n" + "\t" + this.pricePerBigMac +  "\n\t" + this.averageSalary;
+        return this.countryName + ": \n" + "\t" + this.pricePerBigMac + "\n\t" + this.averageSalary;
     }
 }

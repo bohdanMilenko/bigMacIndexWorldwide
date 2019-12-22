@@ -19,13 +19,13 @@ public class CountryService {
      */
     //One functional - change to increase abstraction - check for headers
     //Optional interface - wrapper
-    public  Map<String, CountryFinancialResults> loadData(String filePath) {
+    public Map<String, CountryFinancialResults> loadData(String filePath) {
         Map<String, CountryFinancialResults> stringCountryFinancialResultsHashMap = new HashMap<>();
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(filePath)))) {
             String possibleHeaders = scanner.nextLine();
             if (!checkIfHasHeaders(possibleHeaders)) {
                 possibleHeaders = isValidLine(possibleHeaders);
-                if(possibleHeaders.startsWith(UTF8_BOM)){
+                if (possibleHeaders.startsWith(UTF8_BOM)) {
                     possibleHeaders = possibleHeaders.substring(1);
                 }
                 String[] countryInfo = possibleHeaders.split(",");
@@ -36,13 +36,14 @@ public class CountryService {
                 String line = scanner.nextLine();
                 line = isValidLine(line);
                 if (line.equals("")) {
+                    System.out.println(line);
                     throw new IncorrectlyProcessedStringFormatException("Line contained more comas than expected!");
                 }
                 String[] countryInfo = line.split(",");
                 CountryFinancialResults countryFinancialResults = createCountryRecord(countryInfo);
                 stringCountryFinancialResultsHashMap.put(countryFinancialResults.getCountryName(), countryFinancialResults);
             }
-           // stringCountryFinancialResultsHashMap.forEach( (k,v) -> System.out.println(v.toString()));
+            // stringCountryFinancialResultsHashMap.forEach( (k,v) -> System.out.println(v.toString()));
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -51,7 +52,7 @@ public class CountryService {
     }
 
 
-    private  boolean checkIfHasHeaders(String possibleHeaders) {
+    private boolean checkIfHasHeaders(String possibleHeaders) {
         String headers = cleanStringInput(possibleHeaders);
         String[] line = headers.split(",");
         try {
@@ -65,7 +66,7 @@ public class CountryService {
         return false;
     }
 
-    private  String isValidLine(String inputString) {
+    private String isValidLine(String inputString) {
         String outputString = "";
         int comasCount = 0;
         for (int i = 0; i < inputString.length(); i++) {
@@ -85,7 +86,7 @@ public class CountryService {
         }
     }
 
-    private  String ensureIfDigitsAreValid(String inputString){
+    private String ensureIfDigitsAreValid(String inputString) {
         String outputString = "";
         String[] countryInfo = inputString.split(",");
         for (int i = 2; i < countryInfo.length; i++) {
@@ -99,14 +100,14 @@ public class CountryService {
         return outputString;
     }
 
-    private  String cleanStringInput(String inputString) {
+    private String cleanStringInput(String inputString) {
         String outputString = "";
         outputString = inputString.replaceAll("\\$", "");
         outputString = outputString.replace("\"", "");
         return outputString;
     }
 
-    private   String cleanDigit(String record){
+    private String cleanDigit(String record) {
         String outputString = record;
         outputString = outputString.replaceAll(" ", "");
         outputString = outputString.replaceAll(",", "");
@@ -116,7 +117,7 @@ public class CountryService {
     }
 
 
-    private  String handleExtraComa(String inputString) {
+    private String handleExtraComa(String inputString) {
         String outputString = ensureIfDigitsAreValid(inputString);
         int comaPlace = outputString.lastIndexOf(",");
         StringBuilder sb = new StringBuilder(outputString);
@@ -126,7 +127,7 @@ public class CountryService {
     }
 
 
-    private  CountryFinancialResults createCountryRecord(String[] info) {
+    private CountryFinancialResults createCountryRecord(String[] info) {
         //Regex format is: "Any number of digits . Any number of digits"
         Pattern digitDotDigit = Pattern.compile("\\d+.\\d+");
         Matcher matcherIndex2 = digitDotDigit.matcher(info[2]);
@@ -141,7 +142,7 @@ public class CountryService {
                 i = 0;
                 return new CountryFinancialResults(countryName, currencyAbbreviation, bigMacPrice, averageSalary);
             } else {
-                System.out.println("Line had extra space"+Arrays.toString(info));
+                System.out.println("Line had extra space" + Arrays.toString(info));
 
                 throw new IncorrectlyProcessedStringFormatException("Wrong type of data inside of file! Check if numbers are formatted as numbers");
             }
@@ -153,7 +154,7 @@ public class CountryService {
     }
 
 
-    public  Map<String, CountryFinancialResults> calculateBigMacIndex(Map<String, CountryFinancialResults> inputMap) {
+    public Map<String, CountryFinancialResults> calculateBigMacIndex(Map<String, CountryFinancialResults> inputMap) {
         List<Map.Entry<String, CountryFinancialResults>> list = new ArrayList<>(inputMap.entrySet());
         list.sort(Map.Entry.comparingByValue());
         Map<String, CountryFinancialResults> result = new HashMap<>();
@@ -166,23 +167,39 @@ public class CountryService {
         return result;
     }
 
-     void queryCountryIndex(Map<String, CountryFinancialResults> inputMap) {
+    public void retrieveInfoAboutCountry(Map<String, CountryFinancialResults> inputMap) {
         System.out.println("Please enter a country: ");
         String requestedCountry = UserInputService.getStringFromCustomer();
         int i = 0;
-        if (inputMap.containsKey(requestedCountry)) {
-            CountryFinancialResults foundRecord = inputMap.get(requestedCountry);
-            DecimalFormat df = new DecimalFormat("###,###");
-            System.out.println(foundRecord.getCountryName() + " is " + foundRecord.getRank() + " country in the world to get the cheapest Big Mac. " +
-                    "Average citizen of " + foundRecord.getCountryName() + " can buy " + df.format(foundRecord.getBigMacIndex()) + " burgers!");
+        CountryFinancialResults foundRecord = queryCountryIndex(inputMap,requestedCountry);
+        if (foundRecord != null) {
+            printCountryInfo(foundRecord);
         } else {
             System.out.println("No info, try another one");
-            queryCountryIndex(inputMap);
+            retrieveInfoAboutCountry(inputMap);
             i++;
             if (i == 3) {
                 throw new NoSuchElementException("Failed to find info about this country");
             }
-
         }
+    }
+
+    private CountryFinancialResults queryCountryIndex(Map<String, CountryFinancialResults> inputMap, String requestedCountry) {
+        if (inputMap.containsKey(requestedCountry)) {
+            return inputMap.get(requestedCountry);
+        }
+        return null;
+    }
+
+    private void printCountryInfo(CountryFinancialResults foundRecord){
+        DecimalFormat df = new DecimalFormat("###,###");
+        System.out.println(foundRecord.getCountryName() + " is " + foundRecord.getRank() + " country in the world to get the cheapest Big Mac. " +
+                "Average citizen of " + foundRecord.getCountryName() + " can buy " + df.format(foundRecord.getBigMacIndex()) + " burgers!");
+    }
+
+    public void printOverallResults(Map<String, CountryFinancialResults> rankedCountries) {
+        DecimalFormat df = new DecimalFormat("#");
+        rankedCountries.forEach((k, v) -> System.out.println(v.getRank() + ". " + k + ". People in " + v.getCountryName() + " can purchase "
+                + df.format(v.getAverageSalary() / v.getPricePerBigMac()) + " burgers."));
     }
 }
